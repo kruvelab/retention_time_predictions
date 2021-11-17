@@ -1,0 +1,79 @@
+Compound_name,pKa acid,pKa base,logD A-,logP AH,logD AH2+
+1-hydroxypyrene,9.5,"NA",1.78,3.98,NA
+1-Nitropyrene,"NA","NA",NA,4.22,NA
+17beta estradiol,10.33,-0.88,1.5,3.74,NA
+1H-Benzotriazole,9.0500000000000007,0.22,-0.31,1.3,0.6
+2-(Methylthio)benzothiazole,"NA",1.1299999999999999,NA,3.42,2.44
+2-naphthoic acid,3.99,NA,-0.9,2.62,NA
+4-Amino-6-chloro-1_3-benzenedisulfonamide,9.19,-0.83,-2.92,-1.04,NA
+4-Chloroaniline,"NA",3.49,NA,1.75,-0.47
+5-Methyl-1H-benzotriazole,9.1199999999999992,0.45,0.2,1.81,0.8
+9_10-Phenanthrenequinone,"NA","NA",NA,2.92,NA
+Abietic acid,4.59,"NA",1.42,4.95,NA
+Alachlor,"NA","NA",NA,3.59,NA
+Ametryn,14.63,6.74,NA,2.6,0.63
+Atraton,14.44,6,NA,1.81,-0.23
+Atrazine,4.2,14.48,NA,2.2,0.24
+Benzothiazole,NA,2.2799999999999998,NA,2.11,1.7
+Bicalutamide,11.78,NA,0.13,2.71,NA
+Caffeine,NA,-1.1599999999999999,NA,-0.55,-0.57
+Carbamazepine,15.96,NA,NA,2.76,NA
+Carbazole,14.97,NA,NA,3.09,NA
+Chloridazon,NA,-1.77,NA,1.11,NA
+Chlorpyrifos,NA,NA,NA,4.78,NA
+Chlorthalidone,9.0299999999999994,NA,-1.66,1.6,NA
+Climbazole,NA,6.49,NA,4.33,3.75
+Corticosterone,13.86,-0.26,NA,2.02,NA
+Cotinine,NA,4.79,NA,0.21,-0.77
+Creatinine,9.33,4.96,-4.25,-1.46,-3.44
+Cyanazine,14.44,0.56999999999999995,1.83,1.96,1.3
+Dibenz[a_j]acridine,NA,5.79,NA,5.48,3.79
+Diuron,13.18,NA,NA,2.53,1.77
+Efavirenz,12.52,-1.49,3.36,4.46,NA
+Estrone,10.33,NA,2.06,4.31,NA
+Ethoprop,NA,NA,NA,3.22,NA
+Fipronil,NA,0.18,NA,4.49,4.09
+Flecainide,13.69,9.6199999999999992,2.79,3.19,-0.05
+fluconazole,12.68,2.2999999999999998,-0.77,0.56,-1.52
+Gabapentin,4.63,9.91,-2.54,-1.27,-2.04
+Glibenclamide,4.32,-1.36,2.46,3.79,NA
+Glimepiride,4.32,NA,2.18,3.12,NA
+Haloperidol,13.96,8.0500000000000007,NA,3.66,0.16
+Hydrochlorothiazide,9.09,NA,-3.75,-0.57,NA
+Hydrocortisonacetate,12.61,NA,0.27,1.71,NA
+Imazalil,NA,6.48,NA,3.76,3.16
+Iminostilbene,NA,0.34,NA,3.78,3.28
+Irbesartan,5.85,4.12,3.95,5.39,3.01
+Irgarol,14.13,6.68,2.75,2.98,1.03
+Ketoconazole,NA,6.42,NA,4.19,0.58
+Melamine,NA,9.56,NA,-0.6,-4.09
+Metazachlor,NA,2.34,NA,2.98,0.72
+Metolachlor,NA,NA,NA,3.45,NA
+Metsulfuron-methyl,3.46,1.3,1.05,2.11,0.82
+Monocrotophos,15.73,-0.75,NA,-0.46,NA
+Monuron,13.44,NA,1.33,1.93,NA
+N-Methyl-N-nitrosotoluene-4-sulphonamide,NA,NA,NA,1.93,NA
+Nicotinamide,13.39,3.63,-0.16,-0.4,-1.38
+Norethindrone,NA,-1.66,NA,3.22,NA
+O-Desmethylvenlafaxine,10.11,8.8699999999999992,0.35,2.29,-0.91
+Parathion,NA,NA,NA,3.32,NA
+Phenazone (Antipyrine),NA,0.49,NA,1.22,0.61
+Progesterone,NA,NA,NA,4.15,NA
+Prometryn,14.46,6.71,NA,3.03,1.05
+Propanil,13.9,NA,0.31,3.85,NA
+Propylthiouracil,8.09,NA,-0.74,1.02,NA
+Quinoxaline,NA,1.86,NA,1.3,0.06
+Reserpine,NA,7.02,NA,3.53,0.03
+Sebuthylazine,14.4,4.2,NA,2.72,0.77
+Simazine,14.75,4.2300000000000004,NA,1.78,-0.17
+Sudan I,11.84,-0.1,3.23,5.06,NA
+Sulfamethazine,6.99,2,-0.29,0.65,-1.2
+Sulfapyridine,6.24,2.14,0.06,1.01,-1.43
+Theophylline,7.82,-0.78,-1.76,-0.77,NA
+Tri-isobutyl phosphate,NA,NA,NA,3.85,NA
+Triethyl phosphate,NA,NA,NA,1.18,NA
+Trifluralin,NA,NA,NA,4.6,NA
+Trimethoprim,NA,7.16,NA,1.28,-0.19
+Triphenylphosphate,NA,NA,NA,5.09,NA
+Valsartan,4.3499999999999996,-0.64,0.13,5.27,NA
+Simvastatin,14.91,NA,NA,4.458,NA
