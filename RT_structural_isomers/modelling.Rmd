@@ -1,0 +1,183 @@
+---
+title: "Modelling RT for structural isomers"
+author: "Anneli Kruve"
+date: "2024-12-17"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Libraries and functions
+
+```{r}
+source("functions.R")
+```
+
+# Data
+
+reading in trainign data
+
+```{r}
+data = read_delim("training_enumerated_Mordred_cleaned_overlapping_chemcspace.tsv",
+                  delim = "/")
+
+list_inchikey14 = data %>%
+  select(inchikey14, standardized_inchikey, isomeric, MF) %>%
+  unique()
+
+```
+
+Data for which predictions are made, e.g. external validation set.
+
+```{r}
+
+all_structures = read_delim("file_name.tsv",
+                            delim = "/") 
+```
+
+
+## Modelling
+
+Setting the number of replicated sampling events.
+
+```{r}
+i_max = 50
+results_data = tibble()
+results_stats = tibble()
+modelling_parameters = tibble()
+identifier_this = 1
+```
+
+Setting up modelling parameters, e.g. size of the trainign set and number of enumerated SMILES per chemical.
+
+```{r}
+cutoff_correlated = c(0.7)
+sampling_ratio = tibble(unique_MF = c(20, 0, 40, 30, 0, 60, 50, 0, 100, 100, 0, 200, 140, 0, 280),
+                        isomeric_MF = c(10, 20, 0, 15, 30, 0, 25, 50, 0, 50, 100, 0, 70, 140, 0))
+sampling_enumerated = c(1, 2, 3, 5, 10)
+
+for (cutoff_correlated_this in cutoff_correlated) {
+  for (sampling_enumerated_this in sampling_enumerated) {
+    for (nrow in 1:dim(sampling_ratio)[1]) {
+      modelling_parameters = modelling_parameters %>%
+        bind_rows(tibble(
+          identifier = identifier_this,
+          cutoff_correlated_this = cutoff_correlated_this,
+          sampling_enumerated_this = sampling_enumerated_this,
+          unique_MF_this = sampling_ratio$unique_MF[nrow],
+          isomeric_MF_this = sampling_ratio$isomeric_MF[nrow]))
+      identifier_this = identifier_this + 1
+    }
+  }
+}
+
+write_delim(modelling_parameters,
+            "modelling_parameters.tsv")
+
+```
+
+Modelling
+
+```{r}
+for (identifier_this in 1:75) {
+  for (i in 1:i_max) {
+    set.seed(as.numeric(paste(identifier_this, i, sep = "")))
+    list_unique_training = list_inchikey14 %>%
+      filter(!isomeric) %>%
+      mutate(sampled = sample.split(standardized_inchikey, SplitRatio = modelling_parameters[identifier_this,]$unique_MF_this)) %>%
+      filter(sampled) %>%
+      select(inchikey14, standardized_inchikey, isomeric, MF)
+    
+    list_unique_test = list_inchikey14 %>%
+      filter(!isomeric & !(standardized_inchikey %in% list_unique_training$standardized_inchikey)) %>%
+      mutate(sampled = sample.split(standardized_inchikey, SplitRatio = 50)) %>%
+      filter(sampled) %>%
+      select(inchikey14, standardized_inchikey, isomeric, MF)
+    
+    #first sample for each MF 2 inchikey14
+    list_inchikey14_isomeric_sampled = list_inchikey14 %>%
+      filter(isomeric) %>%
+      group_by(MF) %>%
+      mutate(count = n()) %>%
+      filter(count == 2) %>%
+      mutate(sampled = TRUE) %>% 
+      bind_rows(list_inchikey14 %>%
+                  filter(isomeric) %>%
+                  group_by(MF) %>%
+                  mutate(count = n()) %>%
+                  filter(count > 2) %>%
+                  group_by(MF, count) %>%
+                  mutate(sampled = sample.split(standardized_inchikey, SplitRatio = 2)) %>%
+                  ungroup()) %>%
+      filter(sampled == TRUE)
+    
+    #create training and test based on MW
+    list_isomeric_training = list_inchikey14 %>%
+      filter(isomeric) %>%
+      select(MF) %>%
+      unique() %>%
+      mutate(sampled = sample.split(MF, SplitRatio = modelling_parameters[identifier_this,]$isomeric_MF_this)) %>%
+      filter(sampled) %>%
+      select(MF) %>%
+      left_join(list_inchikey14_isomeric_sampled) %>%
+      select(inchikey14, standardized_inchikey, isomeric, MF)
+    
+    list_isomeric_test = list_inchikey14 %>%
+      filter(isomeric & !(MF %in% list_isomeric_training$MF)) %>%
+      select(MF) %>%
+      unique() %>%
+      mutate(sampled = sample.split(MF, SplitRatio = 25)) %>%
+      filter(sampled) %>%
+      select(MF) %>%
+      left_join(list_inchikey14_isomeric_sampled) %>%
+      select(inchikey14, standardized_inchikey, isomeric, MF)
+    
+    training_data = list_unique_training %>%
+      bind_rows(list_isomeric_training) %>%
+      left_join(data)
+    
+    training_data = training_data %>%
+      group_by(standardized_inchikey) %>%
+      mutate(sampled = sample.split(SMILES_enumerated, SplitRatio = modelling_parameters[identifier_this,]$sampling_enumerated_this)) %>%
+      ungroup() %>%
+      filter(sampled) %>%
+      select(-sampled)
+    
+    test_data = list_unique_test %>%
+      bind_rows(list_isomeric_test) %>%
+      left_join(data)
+    
+    test_data = test_data %>%
+      group_by(inchikey14) %>%
+      mutate(sampled = sample.split(SMILES_enumerated, SplitRatio = 5)) %>%
+      ungroup() %>%
+      filter(sampled) %>%
+      select(-sampled)
+    
+    preProcValues = preProcess(training_data %>% 
+                                 select(-c(inchikey14, standardized_inchikey, isomeric, SMILES_enumerated, RT)), 
+                               method = c("center", "scale"))
+    
+    trainTransformed = predict(preProcValues, training_data)
+    testTransformed = predict(preProcValues, test_data)
+    
+    allTransformed = predict(preProcValues, all_structures)
+    
+    model_this = model_smart_combined(training_data = trainTransformed,
+                                      test_data = testTransformed,
+                                      cutoff_correlated = modelling_parameters[identifier_this,]$cutoff_correlated_this,
+                                      candidate_structures = allTransformed)
+    
+    write_delim(model_this$training_data,
+                paste("training_data_", identifier_this, "_", i, ".csv", sep = ""))
+    write_delim(model_this$test_data,
+                paste("test_data_", identifier_this, "_", i, ".csv", sep = ""))
+    write_delim(model_this$candidate_structures,
+                paste("all_data_", identifier_this, "_", i, ".csv", sep = ""))
+  }
+}
+```
+
+
