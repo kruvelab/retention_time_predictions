@@ -17,10 +17,10 @@ source("functions.R")
 
 # Data
 
-reading in trainign data
+reading in training data
 
 ```{r}
-data = read_delim("training_enumerated_Mordred_cleaned_overlapping_chemcspace.tsv",
+data = read_delim("data_for_model_training.tsv",
                   delim = "/")
 
 list_inchikey14 = data %>%
